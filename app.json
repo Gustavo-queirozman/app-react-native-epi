@@ -7,9 +7,15 @@
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "br.com.gestaoepi.app",
+      "infoPlist": {
+        "ITSAppUsesNonExemptEncryption": false,
+        "NSFaceIDUsageDescription": "Usamos o Face ID para proteger o acesso e confirmar assinaturas de documentos."
+      }
     },
     "android": {
+      "softwareKeyboardLayoutMode": "resize",
       "adaptiveIcon": {
         "backgroundColor": "#E6F4FE",
         "foregroundImage": "./assets/android-icon-foreground.png",
@@ -20,6 +26,22 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "plugins": [
+      "expo-sharing",
+      "expo-sqlite",
+      "expo-secure-store",
+      [
+        "expo-local-authentication",
+        {
+          "faceIDPermission": "Usamos o Face ID para proteger o acesso e confirmar assinaturas de documentos."
+        }
+      ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "8912d4b9-7caf-46b9-80ca-e3f9c7a62027"
+      }
     }
   }
 }

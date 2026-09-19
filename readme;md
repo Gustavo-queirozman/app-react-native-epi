@@ -1,0 +1,7 @@
+npx eas build --platform ios --profile preview
+
+
+npx expo start --tunnel
+
+npx expo start --go --lan --clear
+npx expo start --go --tunnel --clear
