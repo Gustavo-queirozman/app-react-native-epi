@@ -18,7 +18,7 @@ export function AlertsScreen() {
 const styles = StyleSheet.create({
   content: { alignSelf: 'center', flexGrow: 1, padding: 16, width: '100%' },
   card: { minHeight: 149, padding: 16 },
-  title: { color: '#075A35', fontSize: 24, fontWeight: '700', marginBottom: 12 },
-  description: { color: '#62746A', fontSize: 12, lineHeight: 18 },
-  emptyState: { color: '#23362B', fontSize: 16, marginTop: 16 },
+  title: { color: '#12355B', fontSize: 24, fontWeight: '700', marginBottom: 12 },
+  description: { color: '#536B83', fontSize: 12, lineHeight: 18 },
+  emptyState: { color: '#162B45', fontSize: 16, marginTop: 16 },
 });

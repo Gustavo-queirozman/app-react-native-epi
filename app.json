@@ -1,14 +1,14 @@
 {
   "expo": {
-    "name": "gestao-epi",
-    "slug": "gestao-epi",
+    "name": "Handsafe",
+    "slug": "handsafe",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/icon-safety.png",
     "userInterfaceStyle": "light",
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "br.com.gestaoepi.app",
+      "bundleIdentifier": "br.com.handsafe.app",
       "infoPlist": {
         "ITSAppUsesNonExemptEncryption": false,
         "NSFaceIDUsageDescription": "Usamos o Face ID para proteger o acesso e confirmar assinaturas de documentos."
@@ -18,14 +18,14 @@
       "softwareKeyboardLayoutMode": "resize",
       "adaptiveIcon": {
         "backgroundColor": "#E6F4FE",
-        "foregroundImage": "./assets/android-icon-foreground.png",
+        "foregroundImage": "./assets/android-icon-foreground-safety.png",
         "backgroundImage": "./assets/android-icon-background.png",
-        "monochromeImage": "./assets/android-icon-monochrome.png"
+        "monochromeImage": "./assets/android-icon-monochrome-safety.png"
       },
       "predictiveBackGestureEnabled": false
     },
     "web": {
-      "favicon": "./assets/favicon.png"
+      "favicon": "./assets/favicon-safety.png"
     },
     "plugins": [
       "expo-sharing",
@@ -35,6 +35,15 @@
         "expo-local-authentication",
         {
           "faceIDPermission": "Usamos o Face ID para proteger o acesso e confirmar assinaturas de documentos."
+        }
+      ],
+      [
+        "expo-splash-screen",
+        {
+          "backgroundColor": "#E5F5FD",
+          "image": "./assets/handsafe-logo.png",
+          "imageWidth": 260,
+          "resizeMode": "contain"
         }
       ]
     ],

@@ -70,7 +70,7 @@ export function SupplierScreen() {
         <AppButton title={editingId === null ? 'Cadastrar fornecedor' : 'Salvar alterações'} onPress={saveSupplier} />
         {editingId !== null && <AppButton title="Cancelar edição" variant="secondary" onPress={clearForm} />}
       </View>
-      <View style={styles.table}><ScrollView horizontal showsHorizontalScrollIndicator={false}><View>
+      <View style={styles.table}><ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.tableScroll}><View style={styles.tableContent}>
         <View style={[styles.row, styles.tableHeader]}>{tableHeaders.map((header) => <Text key={header} style={[styles.cell, styles.headerCell, header === 'Fornecedor' && styles.supplierColumn]}>{header}</Text>)}</View>
         {suppliers.length === 0
           ? <View style={styles.emptyRow}><Text style={styles.emptyText}>Nenhum fornecedor cadastrado.</Text></View>
@@ -85,15 +85,16 @@ export function SupplierScreen() {
 
 const styles = StyleSheet.create({
   content: { alignSelf: 'center', padding: 16, width: '100%' },
-  title: { color: '#075A35', fontSize: 24, fontWeight: '700' },
-  description: { color: '#62746A', fontSize: 14, lineHeight: 21, marginBottom: 20, marginTop: 6 },
+  title: { color: '#12355B', fontSize: 24, fontWeight: '700' },
+  description: { color: '#536B83', fontSize: 14, lineHeight: 21, marginBottom: 20, marginTop: 6 },
   formGrid: { flexDirection: 'row', flexWrap: 'wrap', gap: 14 },
   businessNameField: { flexBasis: 390 }, tradeNameField: { flexBasis: 290 }, cnpjField: { flexBasis: 220 }, contactField: { flexBasis: 270 }, phoneField: { flexBasis: 190 }, emailField: { flexBasis: 290 }, cityField: { flexBasis: 240 }, stateField: { flexBasis: 100, flexGrow: 0 },
-  required: { color: '#62746A', fontSize: 12, marginTop: 12 },
+  required: { color: '#536B83', fontSize: 12, marginTop: 12 },
   actions: { alignItems: 'flex-start', flexDirection: 'row', flexWrap: 'wrap', gap: 9, marginTop: 16 },
-  table: { borderColor: '#D5E0D9', borderWidth: 1, marginTop: 18 },
-  row: { flexDirection: 'row', minHeight: 48 }, tableHeader: { backgroundColor: '#14653B', minHeight: 36 },
-  cell: { borderRightColor: '#D5E0D9', borderRightWidth: 1, color: '#23362B', fontSize: 13, minWidth: 130, paddingHorizontal: 9, paddingTop: 13 }, supplierColumn: { minWidth: 190 },
-  headerCell: { color: '#FFFFFF', fontWeight: '700', paddingTop: 10 }, actionCell: { alignItems: 'center', borderRightColor: '#D5E0D9', borderRightWidth: 1, flexDirection: 'row', gap: 6, justifyContent: 'center', minWidth: 170, paddingHorizontal: 8 },
-  emptyRow: { alignItems: 'center', justifyContent: 'center', minHeight: 70, minWidth: 920, paddingHorizontal: 16 }, emptyText: { color: '#62746A', fontSize: 14 },
+  table: { borderColor: '#D5E4F3', borderWidth: 1, marginTop: 18, width: '100%' },
+  tableScroll: { flexGrow: 1, minWidth: '100%' }, tableContent: { minWidth: 1010, width: '100%' },
+  row: { flexDirection: 'row', minHeight: 48, width: '100%' }, tableHeader: { backgroundColor: '#1677D2', minHeight: 36 },
+  cell: { borderRightColor: '#D5E4F3', borderRightWidth: 1, color: '#162B45', flex: 1, fontSize: 13, minWidth: 130, paddingHorizontal: 9, paddingTop: 13 }, supplierColumn: { minWidth: 190 },
+  headerCell: { color: '#FFFFFF', fontWeight: '700', paddingTop: 10 }, actionCell: { alignItems: 'center', borderRightColor: '#D5E4F3', borderRightWidth: 1, flex: 1, flexDirection: 'row', gap: 6, justifyContent: 'center', minWidth: 170, paddingHorizontal: 8 },
+  emptyRow: { alignItems: 'center', justifyContent: 'center', minHeight: 70, minWidth: 1010, paddingHorizontal: 16, width: '100%' }, emptyText: { color: '#536B83', fontSize: 14 },
 });

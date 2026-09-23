@@ -66,14 +66,14 @@ function SignaturePad({ value, onChange }: { value: Signature; onChange: (signat
       const previous = stroke[pointIndex];
       const width = Math.hypot(point.x - previous.x, point.y - previous.y);
       const angle = Math.atan2(point.y - previous.y, point.x - previous.x) * (180 / Math.PI);
-      return <View key={`${strokeIndex}-${pointIndex}`} pointerEvents="none" style={[styles.signatureStroke, {
+      return <View key={`${strokeIndex}-${pointIndex}`} style={[styles.signatureStroke, {
         left: (previous.x + point.x) / 2 - width / 2,
         top: (previous.y + point.y) / 2 - 1.25,
         width,
         transform: [{ rotate: `${angle}deg` }],
       }]} />;
     }))}
-    {!hasSignature && <Text pointerEvents="none" style={styles.signatureHint}>Assine aqui com o dedo, caneta ou mouse</Text>}
+    {!hasSignature && <Text style={styles.signatureHint}>Assine aqui com o dedo, caneta ou mouse</Text>}
   </View>;
 }
 
@@ -146,7 +146,7 @@ export function DeliveryScreen({ deliveries, onRegisterDelivery }: { deliveries:
 
       <Text style={styles.biometricHelp}>A confirmação da entrega solicita a biometria do dispositivo.</Text>
       <View style={styles.confirmButton}><AppButton title="Confirmar entrega e assinar com biometria" onPress={() => void registerDelivery()} /></View>
-      <View style={styles.table}><ScrollView horizontal showsHorizontalScrollIndicator={false}><View>
+      <View style={styles.table}><ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.tableScroll}><View style={styles.tableContent}>
         <View style={[styles.row, styles.tableHeader]}>{headers.map((header) => <Text key={header} style={[styles.cell, styles.headerCell]}>{header}</Text>)}</View>
         {deliveries.map((delivery, index) => <View key={delivery.id} style={[styles.row, index % 2 === 1 && styles.alternateRow]}>
           {[delivery.worker, delivery.role, delivery.epi, delivery.quantity, delivery.date, delivery.nextExchange, delivery.reason, delivery.confirmation].map((value, cellIndex) => <Text key={`${delivery.id}-${cellIndex}`} style={[styles.cell, cellIndex === 6 && styles.reasonCell]}>{value}</Text>)}
@@ -158,24 +158,24 @@ export function DeliveryScreen({ deliveries, onRegisterDelivery }: { deliveries:
 
 const styles = StyleSheet.create({
   content: { alignSelf: 'center', padding: 12, width: '100%' },
-  title: { color: '#075A35', fontSize: 24, fontWeight: '700', marginBottom: 18 },
+  title: { color: '#12355B', fontSize: 24, fontWeight: '700', marginBottom: 18 },
   formRow: { flexDirection: 'row', flexWrap: 'wrap', gap: 12 },
   workerField: { flexBasis: 360 }, epiField: { flexBasis: 360 },
-  recommendation: { color: '#62746A', fontSize: 12, marginTop: 3, marginBottom: 13 },
+  recommendation: { color: '#536B83', fontSize: 12, marginTop: 3, marginBottom: 13 },
   quantityField: { flexBasis: 180 }, dateField: { flexBasis: 180 },
   readonlyField: { flexBasis: 260, flexGrow: 1, flexShrink: 1, gap: 7, minWidth: 0 }, exchangeField: {},
-  label: { color: '#075A35', fontSize: 14, fontWeight: '700' },
-  readonlyInput: { backgroundColor: '#EEF2F0', borderColor: '#AABCB2', borderRadius: 7, borderWidth: 1, height: 43, justifyContent: 'center', paddingHorizontal: 12 },
-  readonlyText: { color: '#53645B', fontSize: 16 }, help: { color: '#62746A', fontSize: 12, marginTop: 5, marginBottom: 14 },
-  signaturePanel: { borderColor: '#D5E0D9', borderRadius: 9, borderWidth: 1, marginTop: 12, padding: 11 },
-  signatureTitle: { color: '#075A35', fontSize: 16, fontWeight: '700', marginBottom: 5 },
-  signatureArea: { alignItems: 'center', backgroundColor: '#FCFDFC', borderColor: '#14653B', borderRadius: 7, borderStyle: 'dashed', borderWidth: 2, height: 145, justifyContent: 'center', marginHorizontal: 1, overflow: 'hidden', position: 'relative' },
-  signatureHint: { color: '#77877E', fontSize: 13 }, signatureStroke: { backgroundColor: '#075A35', borderRadius: 2, height: 2.5, position: 'absolute' },
+  label: { color: '#12355B', fontSize: 14, fontWeight: '700' },
+  readonlyInput: { backgroundColor: '#F3F8FD', borderColor: '#AABFD4', borderRadius: 7, borderWidth: 1, height: 43, justifyContent: 'center', paddingHorizontal: 12 },
+  readonlyText: { color: '#536B83', fontSize: 16 }, help: { color: '#536B83', fontSize: 12, marginTop: 5, marginBottom: 14 },
+  signaturePanel: { borderColor: '#D5E4F3', borderRadius: 9, borderWidth: 1, marginTop: 12, padding: 11 },
+  signatureTitle: { color: '#12355B', fontSize: 16, fontWeight: '700', marginBottom: 5 },
+  signatureArea: { alignItems: 'center', backgroundColor: '#F8FBFF', borderColor: '#1677D2', borderRadius: 7, borderStyle: 'dashed', borderWidth: 2, height: 145, justifyContent: 'center', marginHorizontal: 1, overflow: 'hidden', position: 'relative' },
+  signatureHint: { color: '#7489A0', fontSize: 13, pointerEvents: 'none' }, signatureStroke: { backgroundColor: '#12355B', borderRadius: 2, height: 2.5, pointerEvents: 'none', position: 'absolute' },
   statusPill: { alignSelf: 'flex-start', backgroundColor: '#FFF0C3', borderRadius: 14, marginTop: 9, paddingHorizontal: 10, paddingVertical: 5 },
-  signedPill: { backgroundColor: '#DFF2E6' }, statusText: { color: '#805A00', fontSize: 12, fontWeight: '700' }, signedStatusText: { color: '#14653B' },
+  signedPill: { backgroundColor: '#D6F3F0' }, statusText: { color: '#805A00', fontSize: 12, fontWeight: '700' }, signedStatusText: { color: '#1677D2' },
   clearButton: { alignSelf: 'flex-start', marginTop: 12 }, confirmButton: { alignSelf: 'flex-start', marginTop: 14 },
-  biometricHelp: { color: '#53645B', fontSize: 12, marginTop: 13 },
-  table: { borderColor: '#D5E0D9', borderWidth: 1, marginTop: 14 }, row: { flexDirection: 'row', minHeight: 35 }, alternateRow: { backgroundColor: '#EEF6F1' }, tableHeader: { backgroundColor: '#14653B' },
-  cell: { borderRightColor: '#D5E0D9', borderRightWidth: 1, color: '#23362B', fontSize: 13, minWidth: 122, paddingHorizontal: 9, paddingTop: 9 },
+  biometricHelp: { color: '#536B83', fontSize: 12, marginTop: 13 },
+  table: { borderColor: '#D5E4F3', borderWidth: 1, marginTop: 14, width: '100%' }, tableScroll: { flexGrow: 1, minWidth: '100%' }, tableContent: { minWidth: 1022, width: '100%' }, row: { flexDirection: 'row', minHeight: 35, width: '100%' }, alternateRow: { backgroundColor: '#EEF5FC' }, tableHeader: { backgroundColor: '#1677D2' },
+  cell: { borderRightColor: '#D5E4F3', borderRightWidth: 1, color: '#162B45', flex: 1, fontSize: 13, minWidth: 122, paddingHorizontal: 9, paddingTop: 9 },
   reasonCell: { minWidth: 168 }, headerCell: { color: '#FFFFFF', fontWeight: '700', paddingTop: 9 },
 });

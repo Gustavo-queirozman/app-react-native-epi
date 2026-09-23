@@ -12,6 +12,8 @@ const workers = [
 
 const formatDate = (date: Date) => new Intl.DateTimeFormat('pt-BR').format(date);
 
+const responsibilityTerm = 'Declaro que recebi gratuitamente da Destilaria Vale do Paracatu Agroenergia LTDA. o(s) Equipamento(s) de Proteção Individual - EPIs relacionado(s) abaixo (e ao verso) e o respectivo treinamento para o seu uso, conforme estabelecido pelo Artigo 166 da Consolidação das Leis do Trabalho combinado com o item 6.3, alínea "a", e o subitem 6.6.1, alínea "d", da Norma Regulamentadora - NR6, do Ministério do Trabalho e Emprego, com a redação dada pela Portaria/MTE Nº 25, de 15 de outubro de 2001. Comprometo-me a usá-los apenas para a finalidade a que se destinam, responsabilizo-me por sua guarda e conservação, estando obrigado a comunicar ao empregador qualquer alteração que os tornem impróprios para o uso, nos termos do subitem 6.7.1 da referida NR6. Em caso de extravio, perda, uso inadequado, inutilização antes do término do prazo previsto para a sua duração, fica acordado que será lícito o desconto correspondente em meu salário, conforme o Artigo 462, Parágrafo 1º, da CLT. Estou ciente de que a recusa injustificada ao uso obrigatório desses EPIs, para a minha proteção em relação aos riscos presentes no meu ambiente de trabalho, se constituirá ato faltoso da minha parte, dando ensejo à demissão por justa causa (Artigo 482, alínea "h", da CLT). Em caso de desligamento dessa empresa, devolverei a ela todos os EPIs que estiverem sob minha responsabilidade.';
+
 const escapeHtml = (value: string) => value.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#039;');
 
 function signatureSvg(signature: Signature) {
@@ -46,7 +48,7 @@ function buildRecordHtml(worker: typeof workers[number], date: string, deliverie
         .field { border-bottom: 1px solid #1f2823; border-right: 1px solid #1f2823; min-height: 28px; padding: 7px 8px; }
         .field:last-child { border-right: 0; }
         .term { border-bottom: 1px solid #1f2823; padding: 10px; text-align: justify; }
-        .term h2 { color: #006234; font-size: 11pt; margin: 0 0 9px; text-align: center; }
+        .term h2 { color: #12355B; font-size: 11pt; margin: 0 0 9px; text-align: center; }
         .term p { line-height: 1.4; margin: 0; }
         .signature { border-bottom: 1px solid #1f2823; display: flex; flex-wrap: wrap; gap: 24px; min-height: 39px; padding: 10px; }
         table { border-collapse: collapse; table-layout: fixed; width: 100%; }
@@ -55,14 +57,14 @@ function buildRecordHtml(worker: typeof workers[number], date: string, deliverie
         th { border-bottom: 1px solid #1f2823; font-size: 8pt; }
         td { height: 36px; }
         .epi { width: 13%; } .quantity { width: 9%; } .ca { width: 7%; } .delivery { width: 15%; } .employee-signature { width: 23%; } .exchange { width: 18%; } .return { width: 15%; }
-        .signature-drawing svg { display: block; height: 32px; margin: auto; max-width: 100%; width: 100%; } .signature-drawing polyline { fill: none; stroke: #075a35; stroke-linecap: round; stroke-linejoin: round; stroke-width: 3; }
+        .signature-drawing svg { display: block; height: 32px; margin: auto; max-width: 100%; width: 100%; } .signature-drawing polyline { fill: none; stroke: #12355B; stroke-linecap: round; stroke-linejoin: round; stroke-width: 3; }
       </style>
     </head>
     <body>
       <main class="document">
         <section class="header"><div class="mark">EPI</div><div class="heading">FICHA DE CONTROLE DE DISTRIBUIÇÃO DE EQUIPAMENTO DE PROTEÇÃO INDIVIDUAL - EPI</div></section>
         <section class="details">${field('Nome', worker.name)}${field('Matrícula', worker.registration)}${field('Função', worker.role)}${field('Setor', worker.department)}</section>
-        <section class="term"><h2>TERMO DE RESPONSABILIDADE</h2><p>Declaro que recebi gratuitamente os Equipamentos de Proteção Individual relacionados abaixo e as orientações para sua utilização. Comprometo-me a utilizá-los somente para a finalidade a que se destinam, responsabilizando-me por sua guarda e conservação e comunicando qualquer alteração que os torne impróprios para uso. Estou ciente das obrigações estabelecidas pela legislação de segurança e saúde no trabalho e de que deverei devolver os equipamentos reutilizáveis em caso de desligamento.</p></section>
+        <section class="term"><h2>TERMO DE RESPONSABILIDADE</h2><p>${responsibilityTerm}</p></section>
         <section class="signature"><span><strong>Data:</strong> ${escapeHtml(date)}</span><span><strong>Assinatura do empregado:</strong> _______________________________</span></section>
         <table><thead><tr><th class="epi">EPI</th><th class="quantity">QUANT.</th><th class="ca">C.A</th><th class="delivery">DATA ENTREGA</th><th class="employee-signature">ASSINATURA</th><th class="exchange">PRÓXIMA TROCA</th><th class="return">DEVOLUÇÃO</th></tr></thead><tbody>${deliveryRows}</tbody></table>
       </main>
@@ -147,7 +149,7 @@ export function DeliveryRecordScreen({ deliveries }: { deliveries: Delivery[] })
 
         <View style={styles.statement}>
           <Text style={styles.statementTitle}>TERMO DE RESPONSABILIDADE</Text>
-          <Text style={styles.statementText}>Declaro que recebi gratuitamente os Equipamentos de Proteção Individual relacionados abaixo e as orientações para sua utilização. Comprometo-me a utilizá-los somente para a finalidade a que se destinam, responsabilizando-me por sua guarda e conservação e comunicando qualquer alteração que os torne impróprios para uso. Estou ciente das obrigações estabelecidas pela legislação de segurança e saúde no trabalho e de que deverei devolver os equipamentos reutilizáveis em caso de desligamento.</Text>
+          <Text style={styles.statementText}>{responsibilityTerm}</Text>
         </View>
 
         <View style={styles.signatureDate}><Text style={styles.dateText}><Text style={styles.bold}>Data:</Text> {date}</Text><Text style={styles.signatureDateText}><Text style={styles.bold}>Assinatura do empregado:</Text> <Text style={styles.signatureLine}>_______________________________</Text></Text></View>
@@ -217,7 +219,7 @@ function TableCell({ value, style, header = false, last = false, signatureData }
 const styles = StyleSheet.create({
   content: { alignSelf: 'center', padding: 12, width: '100%' },
   card: { gap: 12, padding: 16 },
-  title: { color: '#075A35', fontSize: 24, fontWeight: '700' },
+  title: { color: '#12355B', fontSize: 24, fontWeight: '700' },
   workerSelector: { flexBasis: 'auto', flexGrow: 0 },
   document: { borderColor: '#1F2823', borderWidth: 1, marginTop: 1, overflow: 'hidden' },
   documentHeader: { flexDirection: 'row', minHeight: 70 },
@@ -230,14 +232,14 @@ const styles = StyleSheet.create({
   infoText: { color: '#02060C', fontSize: 12 }, bold: { fontWeight: '700' },
   nameCell: { flexBasis: 260, flexGrow: 1.35 }, registrationCell: { flexBasis: 155, flexGrow: .7 }, roleCell: { flexBasis: 230, flexGrow: 1 }, departmentCell: { borderRightWidth: 0, flexBasis: 190, flexGrow: .85 },
   statement: { borderBottomColor: '#1F2823', borderBottomWidth: 1, paddingHorizontal: 9, paddingVertical: 10 },
-  statementTitle: { color: '#006234', fontSize: 14, fontWeight: '700', marginBottom: 10, textAlign: 'center' },
+  statementTitle: { color: '#12355B', fontSize: 14, fontWeight: '700', marginBottom: 10, textAlign: 'center' },
   statementText: { color: '#02060C', fontSize: 12, lineHeight: 15, textAlign: 'justify' },
   signatureDate: { alignItems: 'flex-start', borderBottomColor: '#1F2823', borderBottomWidth: 1, flexDirection: 'row', flexWrap: 'wrap', gap: 10, minHeight: 35, paddingHorizontal: 9, paddingVertical: 8 },
   dateText: { color: '#02060C', fontSize: 12 }, signatureDateText: { color: '#02060C', fontSize: 12 }, signatureLine: { fontSize: 13, letterSpacing: -1 },
-  tableScroll: { minWidth: '100%' }, table: { minWidth: 730 }, tableRow: { flexDirection: 'row', minHeight: 34 }, tableHeader: { minHeight: 28 }, emptyRow: { alignItems: 'center', justifyContent: 'center', minHeight: 42 }, emptyRowText: { color: '#53645B', fontSize: 11 },
+  tableScroll: { flexGrow: 1, minWidth: '100%' }, table: { minWidth: 730, width: '100%' }, tableRow: { flexDirection: 'row', minHeight: 34, width: '100%' }, tableHeader: { minHeight: 28 }, emptyRow: { alignItems: 'center', justifyContent: 'center', minHeight: 42, width: '100%' }, emptyRowText: { color: '#536B83', fontSize: 11 },
   tableCell: { alignItems: 'center', justifyContent: 'center', paddingHorizontal: 5 }, cellBorder: { borderRightColor: '#1F2823', borderRightWidth: 1 }, tableText: { color: '#02060C', fontSize: 10, textAlign: 'center' }, tableHeaderText: { fontSize: 10, fontWeight: '700' },
   epiColumn: { flex: 1.05 }, quantityColumn: { flex: .95 }, caColumn: { flex: .65 }, deliveryDateColumn: { flex: 1.7 }, tableSignatureColumn: { flex: 2.4 }, exchangeColumn: { flex: 1.8 }, returnColumn: { flex: 1.45 },
-  signaturePreview: { height: 31, overflow: 'hidden', position: 'relative', width: 120 }, signatureStroke: { backgroundColor: '#075A35', borderRadius: 2, height: 2, position: 'absolute' },
+  signaturePreview: { height: 31, overflow: 'hidden', position: 'relative', width: 120 }, signatureStroke: { backgroundColor: '#12355B', borderRadius: 2, height: 2, position: 'absolute' },
   actions: { flexDirection: 'row', flexWrap: 'wrap', gap: 8 },
   printButton: { alignItems: 'center', backgroundColor: '#1677FF', borderRadius: 7, justifyContent: 'center', minHeight: 42, paddingHorizontal: 15 }, printButtonDisabled: { opacity: .65 }, printButtonText: { color: '#FFFFFF', fontSize: 14, fontWeight: '700' },
 });

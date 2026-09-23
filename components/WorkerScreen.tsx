@@ -90,7 +90,7 @@ export function WorkerScreen() {
         {editingId !== null && <AppButton title="Cancelar edição" variant="secondary" onPress={clearForm} />}
       </View>
 
-      <View style={styles.table}><ScrollView horizontal showsHorizontalScrollIndicator={false}><View>
+      <View style={styles.table}><ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.tableScroll}><View style={styles.tableContent}>
         <View style={[styles.row, styles.tableHeader]}>{tableHeaders.map((header) => <Text key={header} style={[styles.cell, styles.headerCell, header === 'EPIs recomendados' && styles.epiColumn]}>{header}</Text>)}</View>
         {workers.map((worker) => <View key={worker.id} style={styles.row}>
           {[worker.name, worker.cpf, worker.registration, worker.job, worker.sector, worker.epis.join(', ') || '-'].map((value, index) => <Text key={`${worker.id}-${index}`} style={[styles.cell, index === 5 && styles.epiColumn]}>{value}</Text>)}
@@ -103,7 +103,7 @@ export function WorkerScreen() {
 
 const styles = StyleSheet.create({
   content: { alignSelf: 'center', padding: 16, width: '100%' },
-  title: { color: '#075A35', fontSize: 24, fontWeight: '700', marginBottom: 20 },
+  title: { color: '#12355B', fontSize: 24, fontWeight: '700', marginBottom: 20 },
   formGrid: { flexDirection: 'row', flexWrap: 'wrap', gap: 14 },
   nameField: { flexBasis: 450 },
   cpfField: { flexBasis: 360 },
@@ -111,20 +111,22 @@ const styles = StyleSheet.create({
   jobField: { flexBasis: 250 },
   sectorField: { flexBasis: 250 },
   recommendedSection: { marginTop: 15 },
-  label: { color: '#075A35', fontSize: 14, fontWeight: '700' },
+  label: { color: '#12355B', fontSize: 14, fontWeight: '700' },
   epiList: { marginTop: 7, maxWidth: 600 },
-  epiOption: { alignItems: 'center', backgroundColor: '#FFFFFF', borderColor: '#D5E0D9', borderRadius: 7, borderWidth: 1, flexDirection: 'row', height: 42, paddingHorizontal: 11 },
-  checkbox: { alignItems: 'center', borderColor: '#78877F', borderRadius: 2, borderWidth: 1, height: 14, justifyContent: 'center', width: 14 },
-  checkboxSelected: { backgroundColor: '#14653B', borderColor: '#14653B' },
+  epiOption: { alignItems: 'center', backgroundColor: '#FFFFFF', borderColor: '#D5E4F3', borderRadius: 7, borderWidth: 1, flexDirection: 'row', height: 42, paddingHorizontal: 11 },
+  checkbox: { alignItems: 'center', borderColor: '#7489A0', borderRadius: 2, borderWidth: 1, height: 14, justifyContent: 'center', width: 14 },
+  checkboxSelected: { backgroundColor: '#1677D2', borderColor: '#1677D2' },
   checkboxTick: { color: '#FFFFFF', fontSize: 11, fontWeight: '700', lineHeight: 12 },
-  epiText: { color: '#23362B', fontSize: 15, marginLeft: 10 },
-  help: { color: '#62746A', fontSize: 12, lineHeight: 18, marginTop: 11 },
+  epiText: { color: '#162B45', fontSize: 15, marginLeft: 10 },
+  help: { color: '#536B83', fontSize: 12, lineHeight: 18, marginTop: 11 },
   actions: { alignItems: 'flex-start', flexDirection: 'row', flexWrap: 'wrap', gap: 9, marginTop: 42 },
-  table: { borderColor: '#D5E0D9', borderWidth: 1, marginTop: 14 },
-  row: { flexDirection: 'row', minHeight: 48 },
-  tableHeader: { backgroundColor: '#14653B', minHeight: 36 },
-  cell: { borderRightColor: '#D5E0D9', borderRightWidth: 1, color: '#23362B', fontSize: 13, minWidth: 112, paddingHorizontal: 9, paddingTop: 13 },
+  table: { borderColor: '#D5E4F3', borderWidth: 1, marginTop: 14, width: '100%' },
+  tableScroll: { flexGrow: 1, minWidth: '100%' },
+  tableContent: { minWidth: 930, width: '100%' },
+  row: { flexDirection: 'row', minHeight: 48, width: '100%' },
+  tableHeader: { backgroundColor: '#1677D2', minHeight: 36 },
+  cell: { borderRightColor: '#D5E4F3', borderRightWidth: 1, color: '#162B45', flex: 1, fontSize: 13, minWidth: 112, paddingHorizontal: 9, paddingTop: 13 },
   epiColumn: { minWidth: 200 },
   headerCell: { color: '#FFFFFF', fontWeight: '700', paddingTop: 10 },
-  actionCell: { alignItems: 'center', borderRightColor: '#D5E0D9', borderRightWidth: 1, flexDirection: 'row', gap: 6, justifyContent: 'center', minWidth: 170, paddingHorizontal: 8 },
+  actionCell: { alignItems: 'center', borderRightColor: '#D5E4F3', borderRightWidth: 1, flex: 1, flexDirection: 'row', gap: 6, justifyContent: 'center', minWidth: 170, paddingHorizontal: 8 },
 });

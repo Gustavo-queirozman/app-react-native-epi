@@ -1,6 +1,6 @@
 import * as SQLite from 'expo-sqlite';
 
-const DATABASE_NAME = 'gestao-epi.db';
+const DATABASE_NAME = 'handsafe.db';
 let databasePromise: Promise<SQLite.SQLiteDatabase> | undefined;
 
 export async function getDatabase(): Promise<SQLite.SQLiteDatabase> {

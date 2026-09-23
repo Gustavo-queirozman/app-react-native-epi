@@ -7,8 +7,8 @@ import { session } from '../src/api/session';
 type LoginScreenProps = { onLogin: () => void; onRegister: () => void; onForgotPassword: () => void };
 
 // Temporary local session while the authentication API is not available yet.
-const STATIC_ACCESS_TOKEN = 'gestao-epi-static-access';
-const STATIC_EMAIL = 'acesso@gestaoepi.local';
+const STATIC_ACCESS_TOKEN = 'handsafe-static-access';
+const STATIC_EMAIL = 'acesso@handsafe.local';
 
 export function LoginScreen({ onLogin, onRegister, onForgotPassword }: LoginScreenProps) {
   const [email, setEmail] = useState('');

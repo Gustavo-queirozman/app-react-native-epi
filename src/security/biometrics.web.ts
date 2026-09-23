@@ -1,7 +1,7 @@
 import { session } from '../api/session';
 import type { BiometricResult, BiometricService } from './biometrics.types';
 
-const CREDENTIAL_ID_KEY = 'gestao-epi.web-authn-credential-id';
+const CREDENTIAL_ID_KEY = 'handsafe.web-authn-credential-id';
 
 function randomBytes(length: number) { const bytes = new Uint8Array(length); crypto.getRandomValues(bytes); return bytes; }
 function getCredentialId() { const value = localStorage.getItem(CREDENTIAL_ID_KEY); return value ? Uint8Array.from(atob(value), (character) => character.charCodeAt(0)) : null; }
@@ -23,7 +23,7 @@ export const biometrics: BiometricService = {
     if (!window.PublicKeyCredential || !navigator.credentials) return { success: false, message: 'Seu navegador não oferece suporte a passkeys/WebAuthn.' };
     try {
       const credential = await navigator.credentials.create({ publicKey: {
-        challenge: randomBytes(32), rp: { name: 'Gestão EPI' }, user: { id: randomBytes(32), name: email, displayName: email },
+        challenge: randomBytes(32), rp: { name: 'Handsafe' }, user: { id: randomBytes(32), name: email, displayName: email },
         pubKeyCredParams: [{ type: 'public-key', alg: -7 }, { type: 'public-key', alg: -257 }],
         authenticatorSelection: { authenticatorAttachment: 'platform', residentKey: 'required', userVerification: 'required' }, timeout: 60_000, attestation: 'none',
       } });

@@ -8,7 +8,7 @@ async function authenticate(promptMessage: string): Promise<BiometricResult> {
   if (!isEnrolled) return { success: false, message: 'Cadastre uma digital ou Face ID nas configurações do dispositivo para continuar.' };
   const result = await LocalAuthentication.authenticateAsync({
     promptMessage,
-    promptDescription: 'Confirme sua identidade para o Gestão EPI.',
+    promptDescription: 'Confirme sua identidade para o Handsafe.',
     cancelLabel: 'Cancelar',
     disableDeviceFallback: true,
     biometricsSecurityLevel: 'strong',
