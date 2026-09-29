@@ -1,26 +1,45 @@
+import { useEffect } from 'react';
+import { apiFetch } from '../src/api/client';
+import { endpoints } from '../src/api/endpoints';
+import { jsonRequest, unwrap, type Profile } from '../src/api/resources';
 import { useState } from 'react';
 import { Alert, Pressable, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
 import { AppButton, FormField, PageCard } from './ui';
 
-type ProfileScreenProps = { onBack: () => void; onLogout: () => void };
+type ProfileScreenProps = { onBack: () => void; onLogout: () => void; onPasswordChanged: () => void };
 
-export function ProfileScreen({ onBack, onLogout }: ProfileScreenProps) {
-  const [name, setName] = useState('Gustavo');
-  const [email, setEmail] = useState('gustavo@empresa.com.br');
+export function ProfileScreen({ onBack, onLogout, onPasswordChanged }: ProfileScreenProps) {
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');
   const [currentPassword, setCurrentPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
 
-  const saveProfile = () => {
+  const [busy, setBusy] = useState(false);
+  const [loaded, setLoaded] = useState(false);
+  const [message, setMessage] = useState('');
+  const load = async () => {
+    setBusy(true); setMessage('');
+    try { const p = unwrap(await apiFetch<Profile | { data: Profile }>(endpoints.auth.profile)); setName(p.nome); setEmail(p.email); setPhone(p.telefone ?? ''); setLoaded(true); }
+    catch (e) { setMessage(e instanceof Error ? e.message : 'Falha ao carregar perfil.'); }
+    finally { setBusy(false); }
+  };
+  useEffect(() => { void load(); }, []);
+  const saveProfile = async () => {
+    if (busy || !loaded) return;
     if (!name.trim() || !email.trim()) {
       Alert.alert('Campos obrigatórios', 'Informe seu nome e e-mail para salvar o perfil.');
       return;
     }
-    Alert.alert('Perfil atualizado', 'Suas informações foram salvas com sucesso.');
+    setBusy(true); setMessage('');
+    try { await jsonRequest(endpoints.auth.profile, 'PATCH', { nome: name.trim(), email: email.trim(), telefone: phone.trim() || null }); setMessage('Perfil atualizado.'); }
+    catch (e) { setMessage(e instanceof Error ? e.message : 'Falha ao salvar.'); }
+    finally { setBusy(false); }
   };
 
-  const changePassword = () => {
+  const changePassword = async () => {
+    if (busy) return;
     if (!currentPassword || !newPassword || !confirmPassword) {
       Alert.alert('Preencha os dados', 'Informe a senha atual, a nova senha e a confirmação.');
       return;
@@ -33,13 +52,15 @@ export function ProfileScreen({ onBack, onLogout }: ProfileScreenProps) {
       Alert.alert('Senhas diferentes', 'A confirmação deve ser igual à nova senha.');
       return;
     }
-    setCurrentPassword('');
-    setNewPassword('');
-    setConfirmPassword('');
-    Alert.alert('Senha atualizada', 'Sua senha foi alterada com sucesso.');
+    setBusy(true); setMessage('');
+    try { await jsonRequest(endpoints.auth.password, 'PATCH', { current_password: currentPassword, password: newPassword, password_confirmation: confirmPassword }); setCurrentPassword(''); setNewPassword(''); setConfirmPassword(''); onPasswordChanged(); }
+    catch (e) { setMessage(e instanceof Error ? e.message : 'Falha ao alterar senha.'); }
+    finally { setBusy(false); }
   };
 
   return <ScrollView contentContainerStyle={styles.content} keyboardShouldPersistTaps="handled">
+    {!!message && <Text accessibilityRole="alert">{message}</Text>}
+    {!loaded && <AppButton title={busy ? "Carregando..." : "Tentar novamente"} disabled={busy} onPress={load} />}
     <View style={styles.topBar}><Pressable accessibilityRole="button" onPress={onBack} style={styles.backButton}><Text style={styles.backText}>‹ Voltar</Text></Pressable></View>
     <View style={styles.intro}><View style={styles.avatar}><Text style={styles.avatarText}>{name.trim().charAt(0).toUpperCase() || 'U'}</Text></View><View><Text style={styles.title}>Meu perfil</Text><Text style={styles.subtitle}>Gerencie suas informações e a segurança da conta.</Text></View></View>
 
@@ -50,7 +71,7 @@ export function ProfileScreen({ onBack, onLogout }: ProfileScreenProps) {
         <FormField label="E-mail corporativo" autoCapitalize="none" keyboardType="email-address" value={email} onChangeText={setEmail} containerStyle={styles.emailField} />
         <FormField label="Telefone" keyboardType="phone-pad" placeholder="(00) 00000-0000" value={phone} onChangeText={setPhone} containerStyle={styles.phoneField} />
       </View>
-      <View style={styles.actions}><AppButton title="Salvar alterações" onPress={saveProfile} /></View>
+      <View style={styles.actions}><AppButton title="Salvar alterações" onPress={saveProfile} disabled={busy || !loaded} /></View>
     </PageCard>
 
     <PageCard style={styles.card}>
@@ -61,7 +82,7 @@ export function ProfileScreen({ onBack, onLogout }: ProfileScreenProps) {
         <PasswordField label="Nova senha" value={newPassword} onChangeText={setNewPassword} />
         <PasswordField label="Confirmar nova senha" value={confirmPassword} onChangeText={setConfirmPassword} />
       </View>
-      <View style={styles.actions}><AppButton title="Alterar senha" variant="secondary" onPress={changePassword} /></View>
+      <View style={styles.actions}><AppButton title="Alterar senha" variant="secondary" onPress={changePassword} disabled={busy} /></View>
     </PageCard>
 
     <PageCard style={[styles.card, styles.logoutCard]}>

@@ -1,14 +1,14 @@
 import { Image, Modal, Platform, Pressable, ScrollView, StyleSheet, Text, useWindowDimensions, View } from 'react-native';
 import { useState } from 'react';
 
-export const screens = ['Painel', 'Funções e periodicidades', 'Trabalhadores', 'Fornecedores', 'Compras', 'Estoque', 'Entrega', 'Ficha', 'Alertas'] as const;
+export const screens = ['Painel', 'Documentos', 'Dispositivos', 'Funções e periodicidades', 'Trabalhadores', 'Fornecedores', 'Compras', 'Estoque', 'Entrega', 'Ficha', 'Alertas'] as const;
 export type ScreenName = (typeof screens)[number];
 type AppHeaderProps = { activeScreen: ScreenName; onChangeScreen: (screen: ScreenName) => void; onOpenProfile: () => void; onLogout: () => void };
 
 const menuTopics: { title: string; items: readonly ScreenName[] }[] = [
   { title: 'Visão geral', items: ['Painel', 'Alertas'] },
   { title: 'Cadastros', items: ['Funções e periodicidades', 'Trabalhadores', 'Fornecedores'] },
-  { title: 'Operações', items: ['Estoque', 'Compras', 'Entrega', 'Ficha'] },
+  { title: 'Operações', items: ['Documentos', 'Dispositivos', 'Estoque', 'Compras', 'Entrega', 'Ficha'] },
 ];
 
 export function AppHeader({ activeScreen, onChangeScreen, onOpenProfile, onLogout }: AppHeaderProps) {

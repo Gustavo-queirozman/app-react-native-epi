@@ -1,3 +1,5 @@
+import { DocumentsScreen } from './components/DocumentsScreen';
+import { DevicesScreen } from './components/DevicesScreen';
 import { StatusBar } from 'expo-status-bar';
 import * as NativeSplashScreen from 'expo-splash-screen';
 import { useCallback, useEffect, useState } from 'react';
@@ -24,12 +26,6 @@ import { session } from './src/api/session';
 
 NativeSplashScreen.preventAutoHideAsync();
 
-const screenTitles: Record<Exclude<ScreenName, 'Funções e periodicidades' | 'Trabalhadores' | 'Fornecedores' | 'Compras'>, string> = { Painel: 'Painel', Estoque: 'Estoque', Entrega: 'Entrega de EPIs', Ficha: 'Ficha de entrega', Alertas: 'Alertas' };
-
-function ComingSoonScreen({ screen }: { screen: Exclude<ScreenName, 'Funções e periodicidades' | 'Trabalhadores' | 'Fornecedores' | 'Compras'> }) {
-  return <ScrollView contentContainerStyle={styles.placeholderContent}><PageCard><Text style={styles.placeholderTitle}>{screenTitles[screen]}</Text><Text style={styles.placeholderText}>Esta área está pronta para receber os dados e fluxos de {screen.toLowerCase()}.</Text></PageCard></ScrollView>;
-}
-
 export default function App() {
   const [isSplashVisible, setIsSplashVisible] = useState(true);
   const [authScreen, setAuthScreen] = useState<'login' | 'forgot-password' | 'register' | 'app'>('login');
@@ -43,11 +39,12 @@ export default function App() {
   }, []);
   const finishSplash = useCallback(() => setIsSplashVisible(false), []);
   const logout = () => setIsLogoutConfirmationOpen(true);
-  const confirmLogout = () => {
+  const confirmLogout = async () => {
     setIsLogoutConfirmationOpen(false);
     setIsProfileOpen(false);
     setActiveScreen('Painel');
-    void session.clear();
+    await session.clear();
+    setDeliveries([]);
     setAuthScreen('login');
   };
   const content = authScreen === 'login'
@@ -56,7 +53,7 @@ export default function App() {
       ? <SafeAreaView style={styles.authSafeArea}><StatusBar style="dark" /><ForgotPasswordScreen onBackToLogin={() => setAuthScreen('login')} /></SafeAreaView>
     : authScreen === 'register'
       ? <SafeAreaView style={styles.authSafeArea}><StatusBar style="dark" /><CompanyRegistrationScreen onBackToLogin={() => setAuthScreen('login')} onRegistered={() => setAuthScreen('app')} /></SafeAreaView>
-      : <SafeAreaView style={styles.safeArea}><StatusBar style="dark" /><AppHeader activeScreen={activeScreen} onChangeScreen={(screen) => { setActiveScreen(screen); setIsProfileOpen(false); }} onOpenProfile={() => setIsProfileOpen(true)} onLogout={logout} /><View style={styles.content}>{isProfileOpen ? <ProfileScreen onBack={() => setIsProfileOpen(false)} onLogout={logout} /> : activeScreen === 'Painel' ? <DashboardScreen onNavigate={(screen) => setActiveScreen(screen)} /> : activeScreen === 'Funções e periodicidades' ? <FunctionPeriodicityScreen /> : activeScreen === 'Trabalhadores' ? <WorkerScreen /> : activeScreen === 'Fornecedores' ? <SupplierScreen /> : activeScreen === 'Compras' ? <PurchaseScreen /> : activeScreen === 'Estoque' ? <StockScreen /> : activeScreen === 'Entrega' ? <DeliveryScreen deliveries={deliveries} onRegisterDelivery={(delivery) => setDeliveries((current) => [delivery, ...current])} /> : activeScreen === 'Ficha' ? <DeliveryRecordScreen deliveries={deliveries} /> : activeScreen === 'Alertas' ? <AlertsScreen /> : <ComingSoonScreen screen={activeScreen} />}</View></SafeAreaView>;
+      : <SafeAreaView style={styles.safeArea}><StatusBar style="dark" /><AppHeader activeScreen={activeScreen} onChangeScreen={(screen) => { setActiveScreen(screen); setIsProfileOpen(false); }} onOpenProfile={() => setIsProfileOpen(true)} onLogout={logout} /><View style={styles.content}>{!isProfileOpen && ['Painel', 'Estoque', 'Entrega', 'Ficha', 'Alertas'].includes(activeScreen) && <Text style={{ padding: 12, backgroundColor: '#FFF3D4', color: '#895C05' }}>Área demonstrativa/local: os dados desta tela não são sincronizados com o servidor. Use Documentos para assinaturas persistidas.</Text>}{isProfileOpen ? <ProfileScreen onPasswordChanged={() => void confirmLogout()} onBack={() => setIsProfileOpen(false)} onLogout={logout} /> : activeScreen === 'Documentos' ? <DocumentsScreen /> : activeScreen === 'Dispositivos' ? <DevicesScreen /> : activeScreen === 'Painel' ? <DashboardScreen onNavigate={(screen) => setActiveScreen(screen)} /> : activeScreen === 'Funções e periodicidades' ? <FunctionPeriodicityScreen /> : activeScreen === 'Trabalhadores' ? <WorkerScreen /> : activeScreen === 'Fornecedores' ? <SupplierScreen /> : activeScreen === 'Compras' ? <PurchaseScreen /> : activeScreen === 'Estoque' ? <StockScreen /> : activeScreen === 'Entrega' ? <DeliveryScreen deliveries={deliveries} onRegisterDelivery={(delivery) => setDeliveries((current) => [delivery, ...current])} /> : activeScreen === 'Ficha' ? <DeliveryRecordScreen deliveries={deliveries} /> : activeScreen === 'Alertas' ? <AlertsScreen /> : null}</View></SafeAreaView>;
 
   if (isSplashVisible) {
     return <AppSplashScreen onFinish={finishSplash} />;
